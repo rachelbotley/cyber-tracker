@@ -1,0 +1,143 @@
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 20px;
+  background: linear-gradient(0deg, var(--bg-tertiary), var(--bg-secondary));
+  border-top: 1px solid var(--border);
+  height: 56px;
+  min-height: 56px;
+}
+
+.transport {
+  display: flex;
+  gap: 4px;
+}
+
+.btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.btn:hover {
+  border-color: var(--purple);
+  background: var(--purple-dim);
+}
+
+.primary {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+.primary:hover {
+  background: var(--cyan-dim);
+}
+
+.seekArea {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.time {
+  font-size: 11px;
+  color: var(--text-secondary);
+  min-width: 40px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.seekBar {
+  flex: 1;
+  position: relative;
+  height: 6px;
+  background: var(--bg-primary);
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+
+.seekInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.seekFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan), var(--magenta));
+  border-radius: 3px;
+  transition: width 0.1s linear;
+  pointer-events: none;
+}
+
+.posInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+}
+
+.posLabel {
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+}
+
+.posValue {
+  font-size: 12px;
+  color: var(--green);
+  min-width: 28px;
+}
+
+.volume {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.volIcon {
+  font-size: 14px;
+}
+
+.volInput {
+  width: 80px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.volInput::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--purple);
+  border: none;
+  cursor: pointer;
+}

@@ -1,0 +1,68 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: linear-gradient(180deg, var(--bg-tertiary), var(--bg-secondary));
+  border-bottom: 1px solid var(--border);
+  height: 50px;
+  min-height: 50px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logoIcon {
+  color: var(--cyan);
+  font-size: 18px;
+  text-shadow: var(--glow-cyan);
+}
+
+.logoText {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 3px;
+  background: linear-gradient(90deg, var(--cyan), var(--magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nowPlaying {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.title {
+  color: var(--cyan);
+  font-weight: 700;
+  font-size: 13px;
+  text-shadow: var(--glow-cyan);
+}
+
+.artist {
+  color: var(--magenta);
+  font-size: 12px;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+}
+
+.libVersion {
+  font-size: 10px;
+  color: var(--text-dim);
+}

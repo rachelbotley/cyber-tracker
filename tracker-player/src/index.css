@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@theme {
+  --color-neon-purple: #b347d9;
+  --color-neon-cyan: #00f0ff;
+  --color-neon-pink: #ff2d95;
+  --color-neon-green: #39ff14;
+  --color-dark-bg: #0a0a0f;
+  --color-dark-surface: #12121a;
+  --color-dark-panel: #1a1a2e;
+  --color-dark-border: #2a2a3e;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  background: var(--color-dark-bg);
+  color: #e0e0e0;
+  font-family: var(--font-mono);
+}
+
+/* Scanline overlay */
+.scanlines::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+}
+
+/* Glitch text */
+@keyframes glitch {
+  0%, 100% { text-shadow: 2px 0 #ff2d95, -2px 0 #00f0ff; }
+  25% { text-shadow: -2px 0 #ff2d95, 2px 0 #00f0ff; }
+  50% { text-shadow: 2px 2px #ff2d95, -2px -2px #00f0ff; }
+  75% { text-shadow: -2px -2px #ff2d95, 2px 2px #00f0ff; }
+}
+
+.glitch-text {
+  animation: glitch 3s infinite;
+}
+
+/* Glow effects */
+.neon-glow-cyan {
+  text-shadow: 0 0 7px #00f0ff, 0 0 10px #00f0ff, 0 0 21px #00f0ff;
+}
+
+.neon-glow-purple {
+  text-shadow: 0 0 7px #b347d9, 0 0 10px #b347d9, 0 0 21px #b347d9;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0f;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a3e;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b347d9;
+}
+
+/* Pattern viewer row highlight */
+.pattern-current-row {
+  background: rgba(0, 240, 255, 0.12);
+  border-left: 2px solid #00f0ff;
+}

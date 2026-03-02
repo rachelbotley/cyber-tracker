@@ -1,0 +1,45 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  gap: 1px;
+  background: var(--border);
+}
+
+.sidebar {
+  width: 300px;
+  min-width: 300px;
+  background: var(--bg-secondary);
+  overflow-y: auto;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1px;
+  background: var(--border);
+}
+
+.vizRow {
+  height: 200px;
+  min-height: 200px;
+  background: var(--bg-primary);
+}
+
+.dataRow {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  gap: 1px;
+  background: var(--border);
+}
