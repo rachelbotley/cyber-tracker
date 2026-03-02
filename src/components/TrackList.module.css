@@ -1,75 +1,157 @@
 .container {
-  padding: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.searchWrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-secondary);
+}
+
+.searchIcon {
+    color: var(--text-dim);
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.searchInput {
+    flex: 1;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.searchInput::placeholder {
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    font-size: 10px;
+}
+
+.searchInput:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 6px rgba(0, 255, 255, 0.15);
+}
+
+.clearBtn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0 2px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.clearBtn:hover {
+    color: var(--cyan);
 }
 
 .title {
-  padding: 12px 16px;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: var(--text-dim);
-  border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    font-family: "Orbitron", sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
 }
 
 .titleIcon {
-  color: var(--purple);
+    color: var(--purple);
+}
+
+.count {
+    margin-left: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    opacity: 0.6;
+}
+
+.list {
+    flex: 1;
+    overflow-y: auto;
 }
 
 .group {
-  border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
 }
 
 .artist {
-  padding: 10px 16px 4px;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--magenta);
+    padding: 10px 16px 4px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--magenta);
 }
 
 .track {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: background 0.15s;
-  font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 16px;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-size: 12px;
 }
 
 .track:hover {
-  background: rgba(170, 68, 255, 0.08);
+    background: rgba(170, 68, 255, 0.08);
 }
 
 .active {
-  background: rgba(0, 255, 255, 0.06) !important;
+    background: rgba(0, 255, 255, 0.06) !important;
 }
 
 .active .trackTitle {
-  color: var(--cyan);
-  text-shadow: var(--glow-cyan);
+    color: var(--cyan);
+    text-shadow: var(--glow-cyan);
 }
 
 .indicator {
-  width: 12px;
-  text-align: center;
-  color: var(--cyan);
-  font-size: 10px;
+    width: 12px;
+    text-align: center;
+    color: var(--cyan);
+    font-size: 10px;
 }
 
 .trackTitle {
-  flex: 1;
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    flex: 1;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .format {
-  font-size: 9px;
-  padding: 1px 5px;
-  border-radius: 3px;
-  background: var(--bg-tertiary);
-  color: var(--text-dim);
-  border: 1px solid var(--border);
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    min-width: 29px;
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.noResults {
+    padding: 24px 16px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
 }

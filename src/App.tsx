@@ -15,6 +15,32 @@ export default function App() {
     init()
   }, [init])
 
+  // Global keyboard shortcuts (ignored when an input is focused)
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
+
+      const { isPlaying, play, pause, nextTrack, prevTrack } = usePlayerStore.getState()
+      switch (e.code) {
+        case 'Space':
+          e.preventDefault()
+          isPlaying ? pause() : play()
+          break
+        case 'ArrowRight':
+          e.preventDefault()
+          nextTrack()
+          break
+        case 'ArrowLeft':
+          e.preventDefault()
+          prevTrack()
+          break
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [])
+
   return (
     <div className={styles.app}>
       <Header />

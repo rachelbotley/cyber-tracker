@@ -1,15 +1,15 @@
-import { usePlayerStore } from '../playerStore'
-import styles from './Header.module.css'
+import { usePlayerStore } from "../playerStore";
+import styles from "./Header.module.css";
 
 export function Header() {
-  const track = usePlayerStore(s => s.currentTrack)
-  const metadata = usePlayerStore(s => s.metadata)
+  const track = usePlayerStore((s) => s.currentTrack);
+  const metadata = usePlayerStore((s) => s.metadata);
 
   return (
     <div className={styles.header}>
       <div className={styles.logo}>
         <span className={styles.logoIcon}>▶</span>
-        <span className={styles.logoText}>DEMOSCENE TRACKER</span>
+        <span className={styles.logoText}>CYBER-TRACKER</span>
       </div>
       {track && (
         <div className={styles.nowPlaying}>
@@ -20,9 +20,11 @@ export function Header() {
       )}
       <div className={styles.info}>
         {metadata && (
-          <span className={styles.libVersion}>libopenmpt {metadata.libopenmptVersion}</span>
+          <span className={styles.libVersion}>
+            libopenmpt {metadata.libopenmptVersion}
+          </span>
         )}
       </div>
     </div>
-  )
+  );
 }

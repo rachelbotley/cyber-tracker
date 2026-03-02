@@ -20,14 +20,77 @@
   color: var(--cyan);
 }
 
-.canvasWrap {
+.grid {
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  background: #0a0a0f;
+  font: 11px/16px 'JetBrains Mono', monospace;
 }
 
-.canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
+.empty {
+  color: #555577;
+  text-align: center;
+  padding-top: 40%;
+  font-size: 12px;
 }
+
+.row {
+  display: flex;
+  height: 16px;
+  align-items: center;
+  padding-left: 2px;
+  white-space: nowrap;
+}
+
+.rowCurrent {
+  background: rgba(0, 255, 255, 0.08);
+  border-left: 2px solid #00ffff;
+  padding-left: 0;
+}
+
+.rowNum,
+.rowNumBeat,
+.rowNumCurrent {
+  display: inline-block;
+  width: 2ch;
+  flex-shrink: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+  text-align: right;
+}
+
+.rowNum { color: #444466; }
+.rowNumBeat { color: #8888aa; }
+.rowNumCurrent { color: #00ffff; }
+
+.ch {
+  padding-left: 6px;
+  border-left: 1px solid rgba(42, 42, 74, 0.3);
+}
+
+.fNote,
+.fInst,
+.fVol,
+.fFx {
+  display: inline-block;
+}
+
+.fNote { width: 3ch; }
+.fInst { width: 2ch; margin-left: 1ch; }
+.fVol  { width: 2ch; margin-left: 1ch; }
+.fFx   { width: 4ch; margin-left: 0.5ch; }
+
+.dim { color: #555577; }
+
+.note { color: #e0e0ff; }
+.noteCur { color: #00ffff; }
+
+.inst { color: #aaaa44; }
+.instCur { color: #ffff44; }
+
+.vol { color: #228844; }
+.volCur { color: #44ff88; }
+
+.fx { color: #884466; }
+.fxCur { color: #ff44aa; }

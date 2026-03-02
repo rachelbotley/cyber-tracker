@@ -6,6 +6,8 @@ export interface Track {
   format: string
 }
 
-export const tracks: Track[] = [
-  { id: '1', file: 'lizardkings_theme.mod', title: "Lizard King's Theme", artist: 'Lizard King', format: 'MOD' },
-]
+export async function fetchTracks(): Promise<Track[]> {
+  const res = await fetch('/__api/tracks')
+  if (!res.ok) return []
+  return res.json()
+}

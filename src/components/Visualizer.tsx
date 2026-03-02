@@ -1,133 +1,150 @@
-import { useRef, useEffect, useCallback } from 'react'
+import { useRef, useEffect, useMemo } from 'react'
 import { usePlayerStore } from '../playerStore'
 import styles from './Visualizer.module.css'
 
+const BAR_COUNT = 128
+
 export function Visualizer() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const barsRef = useRef<(HTMLDivElement | null)[]>([])
+  const waveCanvasRef = useRef<HTMLCanvasElement>(null)
   const animRef = useRef<number>(0)
+  const freqBuf = useRef<Uint8Array | null>(null)
+  const waveBuf = useRef<Uint8Array | null>(null)
   const analyser = usePlayerStore(s => s.analyser)
-  const isPlaying = usePlayerStore(s => s.isPlaying)
 
-  const draw = useCallback(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    // Resize canvas to container
-    const rect = canvas.parentElement!.getBoundingClientRect()
-    if (canvas.width !== rect.width || canvas.height !== rect.height) {
-      canvas.width = rect.width
-      canvas.height = rect.height
-    }
-
-    const W = canvas.width
-    const H = canvas.height
-
-    // Clear
-    ctx.fillStyle = 'rgba(10, 10, 15, 0.85)'
-    ctx.fillRect(0, 0, W, H)
-
-    // Draw grid lines
-    ctx.strokeStyle = 'rgba(42, 42, 74, 0.3)'
-    ctx.lineWidth = 1
-    for (let y = 0; y < H; y += 20) {
-      ctx.beginPath()
-      ctx.moveTo(0, y)
-      ctx.lineTo(W, y)
-      ctx.stroke()
-    }
-    for (let x = 0; x < W; x += 40) {
-      ctx.beginPath()
-      ctx.moveTo(x, 0)
-      ctx.lineTo(x, H)
-      ctx.stroke()
-    }
-
+  // Pre-allocate typed arrays when analyser changes
+  useEffect(() => {
     if (!analyser) {
-      // Draw idle state
-      ctx.fillStyle = 'rgba(85, 85, 119, 0.5)'
-      ctx.font = '14px "Orbitron", sans-serif'
-      ctx.textAlign = 'center'
-      ctx.fillText('SELECT A TRACK TO BEGIN', W / 2, H / 2)
-      animRef.current = requestAnimationFrame(draw)
+      freqBuf.current = null
+      waveBuf.current = null
+      // Reset bars when analyser disconnects
+      for (let i = 0; i < BAR_COUNT; i++) {
+        const bar = barsRef.current[i]
+        if (bar) {
+          bar.style.transform = 'scaleY(0)'
+          bar.style.opacity = '0'
+        }
+      }
       return
     }
-
-    // Frequency data
-    const freqData = new Uint8Array(analyser.frequencyBinCount)
-    analyser.getByteFrequencyData(freqData)
-
-    // Waveform data
-    const waveData = new Uint8Array(analyser.fftSize)
-    analyser.getByteTimeDomainData(waveData)
-
-    // Draw spectrum bars
-    const barCount = 128
-    const barWidth = W / barCount
-    const freqStep = Math.floor(freqData.length / barCount)
-
-    for (let i = 0; i < barCount; i++) {
-      const val = freqData[i * freqStep] / 255
-      const barH = val * H * 0.8
-      const x = i * barWidth
-
-      // Gradient color based on frequency
-      const hue = 180 + (i / barCount) * 120 // cyan -> magenta
-      const sat = 80 + val * 20
-      const light = 30 + val * 40
-
-      // Bar
-      ctx.fillStyle = `hsla(${hue}, ${sat}%, ${light}%, 0.7)`
-      ctx.fillRect(x, H - barH, barWidth - 1, barH)
-
-      // Glow top
-      if (val > 0.3) {
-        ctx.fillStyle = `hsla(${hue}, 100%, 70%, ${val * 0.5})`
-        ctx.fillRect(x, H - barH - 2, barWidth - 1, 3)
-      }
-
-      // Reflection
-      ctx.fillStyle = `hsla(${hue}, ${sat}%, ${light}%, 0.1)`
-      ctx.fillRect(x, H, barWidth - 1, -barH * 0.15)
-    }
-
-    // Draw waveform overlay
-    ctx.beginPath()
-    ctx.strokeStyle = 'rgba(0, 255, 255, 0.4)'
-    ctx.lineWidth = 1.5
-    const sliceWidth = W / waveData.length
-    for (let i = 0; i < waveData.length; i++) {
-      const v = waveData[i] / 128.0
-      const y = (v * H) / 2
-      if (i === 0) ctx.moveTo(0, y)
-      else ctx.lineTo(i * sliceWidth, y)
-    }
-    ctx.stroke()
-
-    // Second waveform pass with glow
-    ctx.beginPath()
-    ctx.strokeStyle = 'rgba(255, 0, 255, 0.2)'
-    ctx.lineWidth = 3
-    for (let i = 0; i < waveData.length; i++) {
-      const v = waveData[i] / 128.0
-      const y = (v * H) / 2
-      if (i === 0) ctx.moveTo(0, y)
-      else ctx.lineTo(i * sliceWidth, y)
-    }
-    ctx.stroke()
-
-    animRef.current = requestAnimationFrame(draw)
+    freqBuf.current = new Uint8Array(analyser.frequencyBinCount)
+    waveBuf.current = new Uint8Array(analyser.fftSize)
   }, [analyser])
 
+  // Animation loop: update bars + waveform canvas
   useEffect(() => {
-    animRef.current = requestAnimationFrame(draw)
+    if (!analyser) return
+    const freqStep = Math.floor(analyser.frequencyBinCount / BAR_COUNT)
+    let lastTime = 0
+
+    const update = (time: number) => {
+      // Throttle to ~30fps
+      if (time - lastTime < 33) {
+        animRef.current = requestAnimationFrame(update)
+        return
+      }
+      lastTime = time
+
+      const freq = freqBuf.current
+      const wave = waveBuf.current
+      if (!freq || !wave) {
+        animRef.current = requestAnimationFrame(update)
+        return
+      }
+
+      analyser.getByteFrequencyData(freq)
+      analyser.getByteTimeDomainData(wave)
+
+      // Update bar transforms
+      for (let i = 0; i < BAR_COUNT; i++) {
+        const bar = barsRef.current[i]
+        if (!bar) continue
+        const val = freq[i * freqStep] / 255
+        bar.style.transform = `scaleY(${val})`
+        bar.style.opacity = `${0.5 + val * 0.5}`
+      }
+
+      // Draw waveform on canvas overlay
+      const canvas = waveCanvasRef.current
+      if (canvas) {
+        const rect = canvas.parentElement!.getBoundingClientRect()
+        const dpr = window.devicePixelRatio || 1
+        const w = rect.width
+        const h = rect.height
+        if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
+          canvas.width = w * dpr
+          canvas.height = h * dpr
+          canvas.style.width = `${w}px`
+          canvas.style.height = `${h}px`
+        }
+        const ctx = canvas.getContext('2d')!
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+        ctx.clearRect(0, 0, w, h)
+
+        // Downsample waveform to ~128 points
+        const step = Math.floor(wave.length / BAR_COUNT)
+
+        // Magenta glow pass (wider, behind)
+        ctx.beginPath()
+        ctx.strokeStyle = 'rgba(255, 0, 255, 0.2)'
+        ctx.lineWidth = 3
+        for (let i = 0; i < BAR_COUNT; i++) {
+          const x = (i / BAR_COUNT) * w
+          const y = (wave[i * step] / 128.0) * h / 2
+          if (i === 0) ctx.moveTo(x, y)
+          else ctx.lineTo(x, y)
+        }
+        ctx.stroke()
+
+        // Cyan pass (sharp)
+        ctx.beginPath()
+        ctx.strokeStyle = 'rgba(0, 255, 255, 0.4)'
+        ctx.lineWidth = 1.5
+        for (let i = 0; i < BAR_COUNT; i++) {
+          const x = (i / BAR_COUNT) * w
+          const y = (wave[i * step] / 128.0) * h / 2
+          if (i === 0) ctx.moveTo(x, y)
+          else ctx.lineTo(x, y)
+        }
+        ctx.stroke()
+      }
+
+      animRef.current = requestAnimationFrame(update)
+    }
+
+    animRef.current = requestAnimationFrame(update)
     return () => cancelAnimationFrame(animRef.current)
-  }, [draw])
+  }, [analyser])
+
+  // Precompute bar styles (static per mount)
+  const barStyles = useMemo(() =>
+    Array.from({ length: BAR_COUNT }, (_, i) => {
+      const hue = 180 + (i / BAR_COUNT) * 120
+      return {
+        '--bar-hue': `${hue}`,
+        '--bar-sat': `${80 + 20}%`,
+        '--bar-light': `${30 + 40}%`,
+      } as React.CSSProperties
+    }),
+  [])
 
   return (
     <div className={styles.container}>
-      <canvas ref={canvasRef} className={styles.canvas} />
+      <div className={styles.grid} />
+      <div className={styles.bars}>
+        {barStyles.map((style, i) => (
+          <div
+            key={i}
+            ref={el => { barsRef.current[i] = el }}
+            className={styles.bar}
+            style={style}
+          />
+        ))}
+      </div>
+      <canvas ref={waveCanvasRef} className={styles.waveCanvas} />
+      {!analyser && (
+        <div className={styles.idle}>SELECT A TRACK TO BEGIN</div>
+      )}
     </div>
   )
 }

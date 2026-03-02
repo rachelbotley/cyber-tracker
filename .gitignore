@@ -2,3 +2,12 @@ node_modules
 dist
 .DS_Store
 *.local
+
+# Module/tracker music files
+*.mod
+*.s3m
+*.xm
+*.it
+*.mptm
+*.stm
+*.med

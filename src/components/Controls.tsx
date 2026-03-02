@@ -1,4 +1,6 @@
+import { useCallback, useRef, useState } from 'react'
 import { usePlayerStore } from '../playerStore'
+import { SpeakerIcon } from './Icons'
 import styles from './Controls.module.css'
 
 function formatTime(s: number): string {
@@ -9,7 +11,6 @@ function formatTime(s: number): string {
 
 export function Controls() {
   const isPlaying = usePlayerStore(s => s.isPlaying)
-  const isPaused = usePlayerStore(s => s.isPaused)
   const currentTime = usePlayerStore(s => s.currentTime)
   const duration = usePlayerStore(s => s.duration)
   const volume = usePlayerStore(s => s.volume)
@@ -24,7 +25,43 @@ export function Controls() {
   const prevTrack = usePlayerStore(s => s.prevTrack)
   const nextTrack = usePlayerStore(s => s.nextTrack)
 
-  const progress = duration > 0 ? (currentTime / duration) * 100 : 0
+  const [isSeeking, setIsSeeking] = useState(false)
+  const [seekTime, setSeekTime] = useState(0)
+  const seekBarRef = useRef<HTMLDivElement>(null)
+
+  const clampedTime = duration > 0 ? Math.min(currentTime, duration) : currentTime
+  const displayTime = isSeeking ? seekTime : clampedTime
+  const progress = duration > 0 ? Math.min((displayTime / duration) * 100, 100) : 0
+
+  const timeFromPointer = useCallback((clientX: number) => {
+    const bar = seekBarRef.current
+    if (!bar || duration <= 0) return 0
+    const rect = bar.getBoundingClientRect()
+    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
+    return ratio * duration
+  }, [duration])
+
+  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (duration <= 0) return
+    e.currentTarget.setPointerCapture(e.pointerId)
+    const t = timeFromPointer(e.clientX)
+    setIsSeeking(true)
+    setSeekTime(t)
+  }, [duration, timeFromPointer])
+
+  const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isSeeking) return
+    setSeekTime(timeFromPointer(e.clientX))
+  }, [isSeeking, timeFromPointer])
+
+  const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isSeeking) return
+    e.currentTarget.releasePointerCapture(e.pointerId)
+    const t = timeFromPointer(e.clientX)
+    seek(t)
+    // Keep showing local position briefly until worklet responds
+    setTimeout(() => setIsSeeking(false), 150)
+  }, [isSeeking, timeFromPointer, seek])
 
   return (
     <div className={styles.controls}>
@@ -40,18 +77,17 @@ export function Controls() {
       </div>
 
       <div className={styles.seekArea}>
-        <span className={styles.time}>{formatTime(currentTime)}</span>
-        <div className={styles.seekBar}>
-          <input
-            type="range"
-            min={0}
-            max={duration || 1}
-            step={0.1}
-            value={currentTime}
-            onChange={e => seek(parseFloat(e.target.value))}
-            className={styles.seekInput}
-          />
+        <span className={styles.time}>{formatTime(displayTime)}</span>
+        <div
+          ref={seekBarRef}
+          className={`${styles.seekBar}${isSeeking ? ` ${styles.seeking}` : ''}`}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+        >
+          <div className={styles.seekTrack} />
           <div className={styles.seekFill} style={{ width: `${progress}%` }} />
+          <div className={styles.seekThumb} style={{ left: `${progress}%` }} />
         </div>
         <span className={styles.time}>{formatTime(duration)}</span>
       </div>
@@ -66,7 +102,7 @@ export function Controls() {
       </div>
 
       <div className={styles.volume}>
-        <span className={styles.volIcon}>🔊</span>
+        <SpeakerIcon className={styles.volIcon} />
         <input
           type="range"
           min={0}
