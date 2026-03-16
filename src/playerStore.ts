@@ -298,12 +298,12 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
       // Mark tracks as local
       const taggedTracks = localTracks.map(t => ({ ...t, source: 'local' as const }))
 
-      // Merge: keep bundled/server tracks, add local tracks
-      const existingTracks = get().tracks.filter(t => t.source !== 'local')
+      // Replace: keep only bundled tracks, swap out server + old local tracks
+      const bundledTracks = get().tracks.filter(t => t.source === 'bundled')
       set({
-        tracks: [...existingTracks, ...taggedTracks],
-        hasLocalFolder: true,
-        localFolderName: dirHandle.name,
+        tracks: [...bundledTracks, ...taggedTracks],
+        hasLocalFolder: taggedTracks.length > 0,
+        localFolderName: taggedTracks.length > 0 ? dirHandle.name : null,
         isScanning: false,
       })
     } catch (err) {
@@ -326,9 +326,9 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
     }
 
     const taggedTracks = localTracks.map(t => ({ ...t, source: 'local' as const }))
-    const existingTracks = get().tracks.filter(t => t.source !== 'local')
+    const bundledTracks = get().tracks.filter(t => t.source === 'bundled')
     set({
-      tracks: [...existingTracks, ...taggedTracks],
+      tracks: [...bundledTracks, ...taggedTracks],
       hasLocalFolder: true,
       localFolderName: 'Dropped files',
     })
@@ -359,11 +359,11 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
       }
 
       const taggedTracks = localTracks.map(t => ({ ...t, source: 'local' as const }))
-      const existingTracks = get().tracks.filter(t => t.source !== 'local')
+      const bundledTracks = get().tracks.filter(t => t.source === 'bundled')
       set({
-        tracks: [...existingTracks, ...taggedTracks],
-        hasLocalFolder: true,
-        localFolderName: dirHandle.name,
+        tracks: [...bundledTracks, ...taggedTracks],
+        hasLocalFolder: taggedTracks.length > 0,
+        localFolderName: taggedTracks.length > 0 ? dirHandle.name : null,
         isScanning: false,
       })
     } catch (err) {
