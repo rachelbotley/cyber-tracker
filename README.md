@@ -2,6 +2,8 @@
 
 A web-based retro tracker music player for MOD, XM, IT, and S3M files. Built with React, Vite, and [chiptune3](https://github.com/nicknisi/chiptune3) (libopenmpt via WebAssembly).
 
+### 🌐 [**Try it live → cyber-tracker-neon.vercel.app**](https://cyber-tracker-neon.vercel.app)
+
 ![Status: Works on my machine](https://img.shields.io/badge/status-works%20on%20my%20machine-brightgreen)
 ![Warning: May heat your laptop](https://img.shields.io/badge/warning-may%20heat%20your%20laptop-orange)
 
@@ -10,7 +12,7 @@ A web-based retro tracker music player for MOD, XM, IT, and S3M files. Built wit
 - 🎹 **Pattern View** — watch the notes scroll by like it's 1994
 - 📊 **Channel Visualizer** — per-channel audio visualization
 - 🎛️ **Playback Controls** — play, pause, seek, volume, track selection
-- 📁 **Track Browser** — browse and play bundled tracker modules
+- 📂 **Local Folder Loading** — open your tracker music collection via File System Access API (Chrome/Edge) or drag-and-drop (all browsers)
 - 🖥️ **Retro Aesthetic** — because tracker music deserves a tracker UI
 
 ## Supported Formats
