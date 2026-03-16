@@ -89,7 +89,7 @@ export function FolderPicker() {
 
       {hasLocalFolder && localFolderName && (
         <span className={styles.folderName} title={localFolderName}>
-          📂 {localFolderName}
+          <FolderOpenIcon className={styles.folderNameIcon} /> {localFolderName}
         </span>
       )}
 
@@ -150,6 +150,7 @@ export function FolderButton() {
         title="Open folder of tracker music"
       >
         <FolderOpenIcon className={styles.headerIcon} />
+        <span className={styles.headerLabel}>OPEN FOLDER</span>
       </button>
       <input
         ref={fileInputRef}
