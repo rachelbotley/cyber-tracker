@@ -299,9 +299,9 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
       const taggedTracks = localTracks.map(t => ({ ...t, source: 'local' as const }))
 
       // Replace: keep only bundled tracks, swap out server + old local tracks
-      const bundledTracks = get().tracks.filter(t => t.source === 'bundled')
+      // When local tracks are loaded, replace everything (including demo)
       set({
-        tracks: [...bundledTracks, ...taggedTracks],
+        tracks: taggedTracks,
         hasLocalFolder: taggedTracks.length > 0,
         localFolderName: taggedTracks.length > 0 ? dirHandle.name : null,
         isScanning: false,
@@ -326,9 +326,9 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
     }
 
     const taggedTracks = localTracks.map(t => ({ ...t, source: 'local' as const }))
-    const bundledTracks = get().tracks.filter(t => t.source === 'bundled')
+    // When local tracks are loaded, replace everything (including demo)
     set({
-      tracks: [...bundledTracks, ...taggedTracks],
+      tracks: taggedTracks,
       hasLocalFolder: true,
       localFolderName: 'Dropped files',
     })
@@ -359,9 +359,9 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
       }
 
       const taggedTracks = localTracks.map(t => ({ ...t, source: 'local' as const }))
-      const bundledTracks = get().tracks.filter(t => t.source === 'bundled')
+      // When local tracks are loaded, replace everything (including demo)
       set({
-        tracks: [...bundledTracks, ...taggedTracks],
+        tracks: taggedTracks,
         hasLocalFolder: taggedTracks.length > 0,
         localFolderName: taggedTracks.length > 0 ? dirHandle.name : null,
         isScanning: false,

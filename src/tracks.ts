@@ -28,8 +28,8 @@ export function getBundledTracks(): Track[] {
     {
       id: 'demo-1',
       file: 'music/demo/lizardkings_theme.mod',
-      title: 'Theme',
-      artist: 'Lizard Kings',
+      title: "Lizard King's Theme",
+      artist: 'Demo',
       format: 'MOD',
       source: 'bundled',
     },

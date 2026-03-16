@@ -150,7 +150,7 @@ describe('buildTracksFromFileList', () => {
 
     expect(tracks).toHaveLength(1)
     expect(tracks[0].artist).toBe('Cool Artist')
-    expect(tracks[0].title).toBe('Theme')
+    expect(tracks[0].title).toBe("Theme")
   })
 
   it('uses "Unknown Artist" for flat files', () => {
@@ -183,8 +183,8 @@ describe('getBundledTracks', () => {
 
     expect(tracks).toHaveLength(1)
     expect(tracks[0].id).toBe('demo-1')
-    expect(tracks[0].title).toBe('Theme')
-    expect(tracks[0].artist).toBe('Lizard Kings')
+    expect(tracks[0].title).toBe("Lizard King's Theme")
+    expect(tracks[0].artist).toBe('Demo')
     expect(tracks[0].format).toBe('MOD')
     expect(tracks[0].source).toBe('bundled')
     expect(tracks[0].file).toContain('lizardkings_theme.mod')
