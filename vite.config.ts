@@ -101,11 +101,15 @@ export default defineConfig({
     },
     {
       name: 'copy-libopenmpt',
-      writeBundle(options) {
+      writeBundle() {
         const src = resolve(__dirname, 'node_modules/chiptune3/libopenmpt.worklet.js')
-        const outDir = options.dir || resolve(__dirname, 'dist/assets')
+        const distRoot = resolve(__dirname, 'dist')
+        const assetsDir = resolve(distRoot, 'assets')
         if (existsSync(src)) {
-          copyFileSync(src, resolve(outDir, 'libopenmpt.worklet.js'))
+          // Copy to both locations — the hashed worklet in assets/ uses a relative
+          // import for libopenmpt.worklet.js, so it must exist in assets/
+          copyFileSync(src, resolve(assetsDir, 'libopenmpt.worklet.js'))
+          copyFileSync(src, resolve(distRoot, 'libopenmpt.worklet.js'))
         }
       }
     }
