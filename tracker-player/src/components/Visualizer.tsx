@@ -1,20 +1,16 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { getAnalyser } from '../player';
-import type { PlayState } from '../types';
 
-interface Props {
-  playState: PlayState;
-}
-
-export default function Visualizer(_props: Props) {
+export default function Visualizer() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
+  const drawRef = useRef<() => void>();
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
     const analyser = getAnalyser();
     if (!canvas || !analyser) {
-      animRef.current = requestAnimationFrame(draw);
+      animRef.current = requestAnimationFrame(() => drawRef.current?.());
       return;
     }
 
@@ -91,11 +87,15 @@ export default function Visualizer(_props: Props) {
     ctx.fillText('FFT SPECTRUM', 4, 10);
     ctx.fillText('OSCILLOSCOPE', 4, halfH + 10);
 
-    animRef.current = requestAnimationFrame(draw);
+    animRef.current = requestAnimationFrame(() => drawRef.current?.());
   }, []);
 
   useEffect(() => {
-    animRef.current = requestAnimationFrame(draw);
+    drawRef.current = draw;
+  }, [draw]);
+
+  useEffect(() => {
+    animRef.current = requestAnimationFrame(() => drawRef.current?.());
     return () => cancelAnimationFrame(animRef.current);
   }, [draw]);
 

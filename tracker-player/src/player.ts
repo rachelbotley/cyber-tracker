@@ -1,12 +1,12 @@
-// @ts-ignore - chiptune3 has no types
+// @ts-expect-error - chiptune3 has no types
 import { ChiptuneJsPlayer } from 'chiptune3';
-import type { ProgressData } from './types';
+import type { ModuleMeta, ProgressData } from './types';
 
 export type PlayerEventHandler = {
   onMetadata?: (meta: ModuleMeta) => void;
   onProgress?: (data: ProgressData) => void;
   onEnded?: () => void;
-  onError?: (err: any) => void;
+  onError?: (err: unknown) => void;
   onInitialized?: () => void;
 };
 

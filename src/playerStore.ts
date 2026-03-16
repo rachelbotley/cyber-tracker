@@ -3,6 +3,7 @@ import { fetchTracks } from './tracks'
 import type { Track } from './tracks'
 
 // We'll use chiptune3 dynamically
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let playerInstance: any = null
 
 // rAF-based progress throttle (~60 updates/sec instead of ~375)
@@ -13,6 +14,7 @@ let progressRafId: number | null = null
 let isTransitioning = false
 
 export interface PatternData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   patterns: any[]
   channels: string[]
   numChannels: number
@@ -30,6 +32,7 @@ export interface PlayerState {
   order: number
   pattern: number
   row: number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadata: any
   patternData: PatternData | null
   analyser: AnalyserNode | null
@@ -86,6 +89,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
       set({ analyser, isInitialized: true })
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     playerInstance.onMetadata((meta: any) => {
       const patternData: PatternData | null = meta?.song ? {
         patterns: meta.song.patterns,
@@ -99,6 +103,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
       })
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     playerInstance.onProgress((data: any) => {
       isTransitioning = false
       latestProgress = { pos: data.pos, order: data.order, pattern: data.pattern, row: data.row }

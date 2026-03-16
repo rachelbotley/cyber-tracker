@@ -25,7 +25,7 @@ export default function App() {
       switch (e.code) {
         case 'Space':
           e.preventDefault()
-          isPlaying ? pause() : play()
+          if (isPlaying) { pause() } else { play() }
           break
         case 'ArrowRight':
           e.preventDefault()

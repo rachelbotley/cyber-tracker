@@ -8,8 +8,8 @@ export function Visualizer() {
   const barsRef = useRef<(HTMLDivElement | null)[]>([])
   const waveCanvasRef = useRef<HTMLCanvasElement>(null)
   const animRef = useRef<number>(0)
-  const freqBuf = useRef<Uint8Array | null>(null)
-  const waveBuf = useRef<Uint8Array | null>(null)
+  const freqBuf = useRef<Uint8Array<ArrayBuffer> | null>(null)
+  const waveBuf = useRef<Uint8Array<ArrayBuffer> | null>(null)
   const analyser = usePlayerStore(s => s.analyser)
 
   // Pre-allocate typed arrays when analyser changes

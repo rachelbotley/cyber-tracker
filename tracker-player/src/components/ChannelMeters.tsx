@@ -13,6 +13,7 @@ export default function ChannelMeters({ meta }: Props) {
   const animRef = useRef<number>(0);
   const peaksRef = useRef<number[]>([]);
   const decayRef = useRef<number[]>([]);
+  const drawRef = useRef<() => void>();
 
   const numChannels = meta?.song?.channels?.length ?? 0;
 
@@ -20,7 +21,7 @@ export default function ChannelMeters({ meta }: Props) {
     const canvas = canvasRef.current;
     const analyser = getAnalyser();
     if (!canvas) {
-      animRef.current = requestAnimationFrame(draw);
+      animRef.current = requestAnimationFrame(() => drawRef.current?.());
       return;
     }
 
@@ -40,7 +41,7 @@ export default function ChannelMeters({ meta }: Props) {
       ctx.fillText('CHANNEL METERS', 4, 10);
       ctx.fillStyle = 'rgba(100, 100, 100, 0.3)';
       ctx.fillText('No module loaded', 4, 25);
-      animRef.current = requestAnimationFrame(draw);
+      animRef.current = requestAnimationFrame(() => drawRef.current?.());
       return;
     }
 
@@ -107,13 +108,17 @@ export default function ChannelMeters({ meta }: Props) {
       ctx.fillRect(peakX - 1, y, 2, barH);
     }
 
-    animRef.current = requestAnimationFrame(draw);
+    animRef.current = requestAnimationFrame(() => drawRef.current?.());
   }, [numChannels]);
+
+  useEffect(() => {
+    drawRef.current = draw;
+  }, [draw]);
 
   useEffect(() => {
     peaksRef.current = [];
     decayRef.current = [];
-    animRef.current = requestAnimationFrame(draw);
+    animRef.current = requestAnimationFrame(() => drawRef.current?.());
     return () => cancelAnimationFrame(animRef.current);
   }, [draw]);
 

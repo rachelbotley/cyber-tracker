@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import type { Track, ModuleMeta, ProgressData, PlayState } from './types';
 import { tracks } from './tracks';
 import { initPlayer, loadTrack, stop, togglePause, setVolume, seek } from './player';
@@ -16,7 +16,17 @@ export default function App() {
   const [volume, setVolumeState] = useState(0.7);
   const [initialized, setInitialized] = useState(false);
   const progressRef = useRef(progress);
-  progressRef.current = progress;
+  useEffect(() => {
+    progressRef.current = progress;
+  }, [progress]);
+
+  const currentTrackRef = useRef(currentTrack);
+  const handleSelectRef = useRef<(track: Track) => void>();
+
+  // Keep ref in sync without assigning inside a hook argument
+  useEffect(() => {
+    currentTrackRef.current = currentTrack;
+  }, [currentTrack]);
 
   const ensurePlayer = useCallback(() => {
     if (initialized) return;
@@ -28,18 +38,15 @@ export default function App() {
         setPlayState('stopped');
         const idx = tracks.findIndex(t => t.id === currentTrackRef.current?.id);
         if (idx >= 0 && idx < tracks.length - 1) {
-          handleSelect(tracks[idx + 1]);
+          handleSelectRef.current?.(tracks[idx + 1]);
         }
       },
-      onError: (e) => console.error('Player error:', e),
+      onError: (e: unknown) => console.error('Player error:', e),
       onInitialized: () => {},
     });
     setInitialized(true);
     setVolume(volume);
   }, [initialized, volume]);
-
-  const currentTrackRef = useRef(currentTrack);
-  currentTrackRef.current = currentTrack;
 
   const handleSelect = useCallback((track: Track) => {
     ensurePlayer();
@@ -52,6 +59,10 @@ export default function App() {
       setPlayState('playing');
     }, 100);
   }, [ensurePlayer]);
+
+  useEffect(() => {
+    handleSelectRef.current = handleSelect;
+  }, [handleSelect]);
 
   const handlePlayPause = useCallback(() => {
     if (playState === 'stopped' && currentTrack) {
@@ -109,7 +120,7 @@ export default function App() {
           {/* Visualizations row */}
           <div className="flex-shrink-0 h-40 flex border-b border-dark-border">
             <div className="flex-1 border-r border-dark-border">
-              <Visualizer playState={playState} />
+              <Visualizer />
             </div>
             <div className="w-72 flex-shrink-0">
               <ChannelMeters meta={meta} progress={progress} playState={playState} />

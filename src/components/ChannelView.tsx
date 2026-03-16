@@ -16,7 +16,7 @@ export function ChannelView() {
     if (!patternData?.patterns?.length) return []
     const pat = patternData.patterns[currentPattern]
     if (!pat?.rows?.[currentRow]) return []
-    return pat.rows[currentRow].map((chData: any[]) => {
+    return pat.rows[currentRow].map((chData: (string | number)[]) => {
       const note = chData[0]
       const inst = chData[1]
       const vol = chData[4]

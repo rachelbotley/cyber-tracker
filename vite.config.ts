@@ -38,7 +38,7 @@ export default defineConfig({
                 res.end(JSON.stringify([]))
                 return
               }
-              const tracks: any[] = []
+              const tracks: { id: string; file: string; title: string; artist: string; format: string }[] = []
               let id = 0
               const entries = readdirSync(MUSIC_DIR).sort()
               for (const artistDir of entries) {

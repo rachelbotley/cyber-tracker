@@ -5,7 +5,7 @@ import styles from './PatternView.module.css'
 const NOTE_NAMES = ['C-', 'C#', 'D-', 'D#', 'E-', 'F-', 'F#', 'G-', 'G#', 'A-', 'A#', 'B-']
 const ROW_HEIGHT = 16
 
-function formatNote(note: any): [string, boolean] {
+function formatNote(note: string | number): [string, boolean] {
   if (typeof note === 'string' && note.trim() && note !== '...') {
     return [note.padEnd(3), true]
   }
@@ -16,7 +16,7 @@ function formatNote(note: any): [string, boolean] {
   return ['...', false]
 }
 
-function formatInst(inst: any): [string, boolean] {
+function formatInst(inst: string | number): [string, boolean] {
   if (typeof inst === 'string' && inst.trim() && inst !== '..') {
     return [inst.padStart(2), true]
   }
@@ -26,7 +26,7 @@ function formatInst(inst: any): [string, boolean] {
   return ['..', false]
 }
 
-function formatVol(vol: any): [string, boolean] {
+function formatVol(vol: string | number): [string, boolean] {
   if (typeof vol === 'string' && vol.trim() && vol !== '..') {
     return [vol.padStart(2), true]
   }
@@ -36,7 +36,7 @@ function formatVol(vol: any): [string, boolean] {
   return ['..', false]
 }
 
-function formatFx(fx: any, fxParam: any): [string, boolean] {
+function formatFx(fx: string | number, fxParam: string | number): [string, boolean] {
   if ((typeof fx === 'string' && fx.trim() && fx !== '.') ||
       (typeof fx === 'number' && fx > 0)) {
     const fxStr = typeof fx === 'number' ? fx.toString(16).toUpperCase() : fx
