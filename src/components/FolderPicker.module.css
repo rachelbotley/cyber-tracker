@@ -1,0 +1,113 @@
+.container {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+
+.dragOver {
+  background: rgba(0, 255, 255, 0.08) !important;
+  border-color: var(--cyan) !important;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg-primary);
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+
+.button:hover:not(:disabled) {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(0, 255, 255, 0.04);
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.1);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.label {
+  flex: 1;
+  text-align: left;
+}
+
+.folderName {
+  display: block;
+  margin-top: 4px;
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px;
+}
+
+.fallbackNote {
+  margin-top: 6px;
+  padding: 4px 6px;
+  background: rgba(255, 136, 68, 0.06);
+  border: 1px solid rgba(255, 136, 68, 0.15);
+  border-radius: 3px;
+}
+
+.noteText {
+  font-size: 9px;
+  color: var(--orange);
+  letter-spacing: 0.5px;
+  line-height: 1.4;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+/* Compact header button */
+.headerButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.headerButton:hover:not(:disabled) {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.15);
+}
+
+.headerButton:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.headerIcon {
+  width: 16px;
+  height: 16px;
+}

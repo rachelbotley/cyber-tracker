@@ -11,3 +11,6 @@ dist
 *.mptm
 *.stm
 *.med
+
+# But keep the bundled demo track
+!public/music/demo/lizardkings_theme.mod

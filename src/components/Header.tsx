@@ -1,4 +1,5 @@
 import { usePlayerStore } from "../playerStore";
+import { FolderButton } from "./FolderPicker";
 import styles from "./Header.module.css";
 
 export function Header() {
@@ -19,6 +20,7 @@ export function Header() {
         </div>
       )}
       <div className={styles.info}>
+        <FolderButton />
         {metadata && (
           <span className={styles.libVersion}>
             libopenmpt {metadata.libopenmptVersion}

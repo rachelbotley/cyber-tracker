@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect } from 'react'
 import { usePlayerStore } from '../playerStore'
 import type { Track } from '../tracks'
 import { SearchIcon } from './Icons'
+import { FolderPicker } from './FolderPicker'
 import styles from './TrackList.module.css'
 
 const FORMAT_COLORS: Record<string, { color: string; bg: string; border: string }> = {
@@ -53,6 +54,7 @@ export function TrackList() {
 
   return (
     <div className={styles.container}>
+      <FolderPicker />
       <div className={styles.searchWrap}>
         <SearchIcon className={styles.searchIcon} />
         <input
